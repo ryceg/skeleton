@@ -6,13 +6,15 @@ export interface ToastMessage {
 	message: string;
 	autohide?: boolean;
 	timeout?: number;
+	background?: string;
 	button?: {
 		label: string;
 		action: any;
 	};
 }
 
-const toastDefaults: any = { message: 'Default Toast Message', autohide: true, timeout: 5000 };
+export const toastDefaults: any = { message: 'Default Toast Message', autohide: true, timeout: 5000 };
+let toastId: number = 0;
 
 function toastService(): any {
 	const { subscribe, set, update } = writable([]);
@@ -21,15 +23,18 @@ function toastService(): any {
 		// Trigger - append to end of queue
 		trigger: (toast: any) =>
 			update((tStore: any) => {
-				let tMerged: any = { ...toastDefaults, ...toast };
+				let tMerged: any = { id: toastId, ...toastDefaults, ...toast };
+				handleToastTimeout(tMerged);
 				tStore.push(tMerged);
+				toastId += 1;
 				return tStore;
 			}),
 		// Close - remove first item in queue
-		close: () =>
+		close: (id: number) =>
 			update((tStore) => {
 				if (tStore.length > 0) {
-					tStore.shift();
+					const index: number = tStore.findIndex((t: any) => t.id === id);
+					tStore.splice(index, 1);
 				}
 				return tStore;
 			}),
@@ -40,21 +45,12 @@ function toastService(): any {
 
 export const toastStore: any = toastService();
 
-// Handle Queue Autohide
-let timeoutAutoHide: any;
-toastStore.subscribe((t: any) => {
-	// On update, clear any existing timers
-	clearTimeout(timeoutAutoHide);
-	// If the list is empty, return
-	if (!t.length) {
-		return;
-	}
-	// If autohide is false, return
-	if (!t[0].autohide) {
-		return;
-	}
-	// Set a timeout for the amount specified but the current visible toast
-	timeoutAutoHide = setTimeout(() => {
-		toastStore.close();
-	}, t[0].timeout);
-});
+// Timeout Handler
+function handleToastTimeout(t: any): void {
+	// If autohide false, persist until dismissed
+	if (!t.autohide) return;
+	// Close after Timeout
+	setTimeout(() => {
+		toastStore.close(t.id);
+	}, t.timeout);
+}

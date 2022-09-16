@@ -1,6 +1,11 @@
 <script lang="ts">
-	import { Card, DataTable, Divider, Button, toastStore, type ToastMessage } from '@brainandbones/skeleton';
+	import { Card, DataTable, Divider, Button } from '@brainandbones/skeleton';
+	import { toastStore, type ToastMessage, toastDefaults } from '$lib/utilities/Toast/stores';
 	import CodeBlock from '$lib/utilities/CodeBlock/CodeBlock.svelte';
+
+	// Local
+	const textLorem: string =
+		'Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio consequuntur, blanditiis ducimus perspiciatis minima odit repellat rem iste incidunt laborum amet culpa officia maiores eum qui asperiores.';
 
 	// Trigger Examples
 	function toastBasic(): void {
@@ -9,16 +14,15 @@
 	}
 	function toastLong(): void {
 		const t: ToastMessage = {
-			message:
-				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio consequuntur, blanditiis ducimus perspiciatis minima odit repellat rem iste incidunt laborum amet culpa officia maiores eum qui asperiores.',
+			message: textLorem,
 			autohide: false
 		};
 		toastStore.trigger(t);
 	}
 	function toastMultiple(): void {
-		toastStore.trigger({ message: 'Message will auto-hide after 5 seconds.' });
-		toastStore.trigger({ message: 'Message will remain until dismissed.', autohide: false });
-		toastStore.trigger({ message: 'Message will last 2 second.', timeout: 2000 });
+		toastStore.trigger({ message: `Auto-hides after ${toastDefaults.timeout / 1000} seconds.`, background: 'bg-primary-500' });
+		toastStore.trigger({ message: 'Remains until dismissed.', autohide: false, background: 'bg-accent-500' });
+		toastStore.trigger({ message: 'Remains for 2 second.', timeout: 2000, background: 'bg-warning-500' });
 	}
 	function toastAction(): void {
 		const t: ToastMessage = {
@@ -54,12 +58,39 @@
 	</header>
 
 	<!-- Examples -->
-	<Card slotBody="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-full md:max-w-[320px] lg:max-w-[640px] mx-auto">
-		<Button variant="ghost-primary" on:click={toastBasic}>Short</Button>
-		<Button variant="ghost-primary" on:click={toastLong}>Long</Button>
-		<Button variant="ghost-primary" on:click={toastMultiple}>Multiple</Button>
-		<Button variant="ghost-primary" on:click={toastAction}>Action</Button>
-	</Card>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<Card slotBody="flex justify-between items-center space-x-4">
+			<div class="space-y-2">
+				<h4>Basic</h4>
+				<p>The standard toast which lasts for ${toastDefaults.timeout / 1000} seconds.</p>
+			</div>
+			<Button variant="ghost" on:click={toastBasic}>Trigger</Button>
+		</Card>
+		<Card slotBody="flex justify-between items-center space-x-4">
+			<div class="space-y-2">
+				<h4>Long</h4>
+				<p>A toast with a long string of text.</p>
+			</div>
+			<Button variant="ghost" on:click={toastLong}>Trigger</Button>
+		</Card>
+		<Card slotBody="flex justify-between items-center space-x-4">
+			<div class="space-y-2">
+				<h4>Multiple</h4>
+				<p>Multilpe toasts with custom background colors.</p>
+			</div>
+			<Button variant="ghost" on:click={toastMultiple}>Trigger</Button>
+		</Card>
+		<Card slotBody="flex justify-between items-center space-x-4">
+			<div class="space-y-2">
+				<h4>Action</h4>
+				<p>Display an interactive action button.</p>
+			</div>
+			<Button variant="ghost" on:click={toastAction}>Trigger</Button>
+		</Card>
+	</div>
+
+	<!-- Debug Queue -->
+	<!-- <pre>{JSON.stringify($toastStore, null, 2)}</pre> -->
 
 	<Divider />
 
@@ -110,6 +141,7 @@ const t: ToastMessage = {
     // Optional:
     autohide: true, 
     timeout: 5000,
+    background: 'bg-warning-500',
     button: { label: 'Greeting', action: () => { alert('Hello, Skeleton'); }}
 };
         `.trim()}
