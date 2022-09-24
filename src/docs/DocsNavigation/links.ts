@@ -59,6 +59,7 @@ export const menuNavLinks: any = [
 			{ href: '/components/range-sliders', label: 'Range Sliders' },
 			{ href: '/components/slide-toggles', label: 'Slide Toggles' },
 			{ href: '/components/steppers', label: 'Steppers' },
+			{ href: '/components/swapper', label: 'Swappers' },
 			{ href: '/components/tabs', label: 'Tabs' },
 			{ href: '/components/tooltips', label: 'Tooltips' }
 			// Work in Progress
