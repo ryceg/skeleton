@@ -2,6 +2,12 @@
 	import Swapper from "$lib/components/Swapper/Swapper.svelte";
     import SwapperItem from "$lib/components/Swapper/SwapperItem.svelte";
 import CodeBlock from "$lib/utilities/CodeBlock/CodeBlock.svelte";
+	import { writable } from "svelte/store";
+
+	// Stores
+	let storeOne = writable('a');
+	let storeTwo = writable('a');
+	let storeThree = writable('a');
 </script>
 
 <div class="space-y-8">
@@ -17,9 +23,10 @@ import CodeBlock from "$lib/utilities/CodeBlock/CodeBlock.svelte";
 		<div class="space-y-4 xl:space-y-0 xl:grid grid-cols-[1.5fr,1fr] gap-2">
 				<!-- Examples -->
 			<div class="card card-body space-y-4">
-                <Swapper {active}>
-                    <SwapperItem value="a">Tab A</SwapperItem>
-                    <SwapperItem value="b">Tab B</SwapperItem>
+                <Swapper selected={storeOne}>
+                    <SwapperItem value="a">Swap A</SwapperItem>
+                    <SwapperItem value="b">Swap B</SwapperItem>
+                    <SwapperItem value="c">Swap C</SwapperItem>
                 </Swapper>
             </div>
         </div>
