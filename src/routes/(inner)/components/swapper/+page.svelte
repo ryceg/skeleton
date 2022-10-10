@@ -24,9 +24,9 @@ import CodeBlock from "$lib/utilities/CodeBlock/CodeBlock.svelte";
 				<!-- Examples -->
 			<div class="card card-body space-y-4">
                 <Swapper selected={storeOne}>
-                    <SwapperItem value="a">Swap A</SwapperItem>
-                    <SwapperItem value="b">Swap B</SwapperItem>
-                    <SwapperItem value="c">Swap C</SwapperItem>
+                    <SwapperItem value="a">😈</SwapperItem>
+                    <SwapperItem value="b">😇</SwapperItem>
+                    <SwapperItem value="c">🥶</SwapperItem>
                 </Swapper>
             </div>
         </div>
