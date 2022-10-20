@@ -14,11 +14,15 @@
 	 * @type { string | undefined }*/
 	export let slotContent: string | undefined = undefined;
 	// A11y
-	/** Provide semantic ID for ARIA summary element. a11y https://www.w3.org/WAI/ARIA/apg/example-index/accordion/accordion
-	 * @type { string | undefined }*/
+	/** Provide semantic ID for ARIA summary element.
+	 * @a11y https://www.w3.org/WAI/ARIA/apg/example-index/accordion/accordion
+	 * @type { string | undefined }
+	 * */
 	export let summaryId: string | undefined = undefined;
-	/** Provide semantic ID for ARIA content element. a11y https://www.w3.org/WAI/ARIA/apg/example-index/accordion/accordion
-	 * @type { string | undefined }*/
+	/** Provide semantic ID for ARIA content element.
+	 * @a11y https://www.w3.org/WAI/ARIA/apg/example-index/accordion/accordion
+	 * @type { string | undefined }
+	 * */
 	export let contentId: string | undefined = undefined;
 
 	// Context
