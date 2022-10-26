@@ -4,7 +4,7 @@ export interface ArgsTooltip {
 	/** The HTML content of the tooltip. */
 	content: string;
 	/** Provide a value of: top | bottom | left | right */
-	position?: string;
+	position?: 'top' | 'bottom' | 'left' | 'right';
 	/** Sets the wrapping element to be either inline or block */
 	inline?: boolean;
 	/** Provide an optional callback function to handle open/close state changes. */
@@ -34,7 +34,7 @@ export interface ArgsTooltip {
 }
 
 export function tooltip(node: HTMLElement, args: ArgsTooltip) {
-	const animDuration: number = 150;
+	const animDuration = 150;
 	let elemTooltip: HTMLElement;
 
 	// Map the Args and provide default values

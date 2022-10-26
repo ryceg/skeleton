@@ -4,13 +4,13 @@
 
 <script lang="ts">
 	// Props
-	/** Pass canned svg name. Slot value overrides this.*/
+	/** Pass canned SVG name. Slot value overrides this.*/
 	export let name: string = 'image';
-	/** Native X attribute for the svg element.*/
+	/** Native X attribute for the SVG element.*/
 	export let x: string = '0px';
-	/** Native Y attribute for the svg element.*/
+	/** Native Y attribute for the SVG element.*/
 	export let y: string = '0px';
-	/** Native viewBox attribute for the svg element.*/
+	/** Native viewBox attribute for the SVG element.*/
 	export let viewBox: string = icons[name].viewBox || '0 0 512 512';
 
 	// Props (Styles)

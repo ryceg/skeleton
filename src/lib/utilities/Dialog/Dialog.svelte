@@ -13,7 +13,7 @@
 	export let background: string = 'bg-surface-200-700-token';
 	/** Provide classes to set max modal width.*/
 	export let width: string = 'max-w-[640px]';
-	/** The animation in/out durations. Set to zero (0) for none.*/
+	/** The animation in/out durations, in milliseconds. Set to zero (0) for none.*/
 	export let duration: number = 100;
 
 	// Local Settings

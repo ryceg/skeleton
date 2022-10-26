@@ -8,7 +8,7 @@
 	export let selected: Writable<any>;
 	/** Toggless the bottom border below the tabs.*/
 	export let rail: boolean = true;
-	/** Provide classes to set the flex justification. 'justify-start' is best for small screens.*/
+	/** Provide classes to set the flex justification. `'justify-start'` is best for small screens.*/
 	export let justify: string = 'justify-start';
 	/** Provide classes to set the selected border size. Shared between group and tab.*/
 	export let borderWidth: string = 'border-b-2';

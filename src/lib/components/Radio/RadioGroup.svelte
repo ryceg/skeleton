@@ -6,16 +6,16 @@
 	/** Provide a Svelte writable to store the selected state value.*/
 	export let selected: Writable<any>;
 	/** Provide classes to set the display style.
-	 * @type {'inoine-flex' | 'flex' | 'block'}
+	 * @type {'inline-flex' | 'flex' | 'block'}
 	*/
-	export let display: string = 'inline-flex';
+	export let display: 'inline-flex' | 'flex' | 'block' = 'inline-flex';
 	/** Provide classes to set the base background color.*/
 	export let background: string = 'bg-surface-200-700-token';
 	//AUDIT can this be arbitrary or does it tie into the token system and have restricted values ?
 	/** Provide classes to set the border width*/
 	export let borderWidth: string = 'border-token';
 	/** Provide classes to set the border color.*/
-	export let borderColor: string = 'border-surface-300 dark:border-surface-600';
+	export let borderColor: string = 'border-surface-300-600-token';
 	/** Provide classes to set the hover style.*/
 	export let hover: string = 'bg-accent-hover-token';
 	/** Provide classes to set the highlighted accent color.*/

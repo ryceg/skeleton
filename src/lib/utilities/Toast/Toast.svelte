@@ -10,7 +10,7 @@
 	/** Set top/bottom/left/right positioning.
 	 * @type {'t' | 'b' | 'tr' | 'tl' | 'bl' | 'br'}
 	*/
-	export let position: string = 'b'; // bottom
+	export let position: 't' | 'b' | 'tr' | 'tl' | 'bl' | 'br' = 'b'; // bottom
 	/** Provide a <a href="https://www.skeleton.dev/components/buttons">button variant</a> reference.*/
 	export let button: string = 'btn-ghost';
 	/** The duration of the fly in/out animation.*/

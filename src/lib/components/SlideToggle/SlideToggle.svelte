@@ -10,7 +10,7 @@
 	/** Sets the size of the component.
 	 * @type {'sm' | 'md' | 'lg'}
 	*/
-	export let size: string = 'md';
+	export let size: 'sm' | 'md' | 'lg' = 'md';
 	/** Provide classes to set the checked state color.*/
 	export let accent: string = 'bg-accent-500';
 	/** Provide classes to set the border width styles.*/
