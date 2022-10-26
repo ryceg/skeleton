@@ -7,19 +7,28 @@
 
 	// Props
     export let items = writable([]);
+    /** Which item is currently selected. */
 	export let selected: Writable<any>;
+    /** Does this rotate on change? */
     export let rotate: boolean = false;
+    /** Does this flip on change? */
     export let flip: boolean = false;
+    /** Does this fade on change? */
     export let fade: boolean = false;
+    /** Duration of the transition in milliseconds */
     export let duration: number = 300; // ms
 
     // Button
+    /** The TailWind rounded attribute */
 	export let rounded: string = 'rounded';
+    /** The TailWind background attribute */
 	export let background: string = 'bg-surface-300 dark:bg-surface-700';
 
-    
+
 	// A11y
+    /** Provide the ID of the element that describes the group */
 	export let labeledby: string | undefined = undefined;
+    /** Defines a semantic label for the group */
 	export let label: string | undefined = undefined;
 
     // Context
