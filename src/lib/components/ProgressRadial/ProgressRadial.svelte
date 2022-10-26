@@ -3,9 +3,9 @@
 	import { afterUpdate } from 'svelte';
 
 	// Props
-	/** Set the meter fill amount. Shows as indeterminate when set undefined.*/
+	/** Set the meter fill amount. Shows as indeterminate when `undefined`.*/
 	export let value: number | undefined = undefined; // %
-	/** Sets the base stroke width. Scales responsively.*/
+	/** Sets the base stroke width in `px`. Scales responsively.*/
 	export let stroke: number = 20; // px
 	/** Provide classes to set meter color.*/
 	export let meter: string = 'stroke-accent-500';

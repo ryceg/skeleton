@@ -2,7 +2,7 @@
 	// Props
 	/** Set the label text.*/
 	export let label: string = '';
-	/** Specifies the amount completed. Indeterminate when <code>undefined</code>*/
+	/** Specifies the amount completed. Indeterminate when `undefined` */
 	export let value: number | undefined = undefined;
 	/** Maximum amount the bar represents.*/
 	export let max: number = 100;
@@ -12,9 +12,9 @@
 	export let rounded: string = 'rounded-token';
 
 	// Props (elements)
-	/** Provide arbitrary classes to style the meter element.*/
+	/** Provide classes to style the meter element.*/
 	export let meter: string = 'bg-accent-500';
-	/** Provide arbitrary classes to style the track element.*/
+	/** Provide classes to style the track element.*/
 	export let track: string = 'bg-surface-200-700-token';
 
 	// Base Classes

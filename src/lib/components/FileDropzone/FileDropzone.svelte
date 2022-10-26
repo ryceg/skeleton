@@ -10,13 +10,13 @@
 	/** Provided additional notes or information.*/
 	export let notes: string = '';
 	// Props (Styles)
-	/** Provide styles to set the dropzone width.*/
+	/** Provide classes to set the dropzone width.*/
 	export let width: string = 'w-full';
-	/** Provide styles to set the dropzone height.*/
+	/** Provide classes to set the dropzone height.*/
 	export let height: string = 'h-24';
-	/** Provide styles to set the dropzone padding.*/
+	/** Provide classes to set the dropzone padding.*/
 	export let padding: string = 'p-4';
-	/** Provide styles to set the dropzone text color.*/
+	/** Provide classes to set the dropzone text color.*/
 	export let color: string = '';
 
 	// Classes
