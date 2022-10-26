@@ -5,8 +5,14 @@
 	import { storeHighlightJs } from '$lib/utilities/CodeBlock/stores';
 	storeHighlightJs.set(hljs);
 
+	// SvelteKit Imports
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { afterNavigate } from '$app/navigation';
+
+	// Stores
+	import { storeCurrentUrl, storeTheme } from '$docs/stores';
+	import { storePreview } from '$docs/DocsThemer/stores';
 
 	// Components & Utilities
 	import AppShell from '$lib/components/AppShell/AppShell.svelte';
@@ -19,15 +25,32 @@
 	import DocsDrawer from '$docs/DocsNavigation/DocsDrawer.svelte';
 	import DocsFooter from '$docs/DocsFooter/DocsFooter.svelte';
 
-	// Stores
-	import { storeCurrentUrl } from '$docs/stores';
+	// Themes
+	// https://vitejs.dev/guide/features.html#disabling-css-injection-into-the-page
+	import rocket from '$lib/themes/theme-rocket.css?inline';
+	import modern from '$lib/themes/theme-modern.css?inline';
+	import seafoam from '$lib/themes/theme-seafoam.css?inline';
+	import vintage from '$lib/themes/theme-vintage.css?inline';
+	import sahara from '$lib/themes/theme-sahara.css?inline';
+	import seasonal from '$lib/themes/theme-seasonal.css?inline';
 
-	// Skeleton Theme: skeleton|rocket|modern|seafoam|vintage|sahara|test
-	import '$lib/themes/theme-skeleton.css';
+	// Default Theme, injected immediately:
+	import skeleton from '$lib/themes/theme-skeleton.css';
 	// Skeleton Stylesheets
 	import '$lib/styles/all.css';
 	// Global Stylesheets
 	import '../app.postcss';
+
+	// List of Themes
+	const themes: any = { skeleton, rocket, modern, seafoam, vintage, sahara, seasonal };
+
+	// Set body `data-theme` based on current theme status
+	storeTheme.subscribe(setBodyThemeAttribute);
+	storePreview.subscribe(setBodyThemeAttribute);
+	function setBodyThemeAttribute(): void {
+		if (!browser) return;
+		document.body.setAttribute('data-theme', $storePreview ? 'generator' : $storeTheme);
+	}
 
 	// Lifecycle Events
 	afterNavigate((params: any) => {
@@ -42,8 +65,13 @@
 	});
 
 	// Disable left sidebar on homepage
-	$: slotSidebarLeft = $page.url.pathname === '/' ? 'w-0' : 'bg-black/5 lg:w-auto';
+	$: slotSidebarLeft = $page.url.pathname === '/' ? 'w-0' : 'bg-white/20 dark:bg-black/5 lg:w-auto';
 </script>
+
+<svelte:head>
+	<!-- Select Preset Theme CSS -->
+	{@html `\<style\>${themes[$storeTheme]}}\</style\>`}
+</svelte:head>
 
 <!-- Overlays -->
 <Dialog />

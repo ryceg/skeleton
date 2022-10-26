@@ -1,12 +1,45 @@
 <script lang="ts">
 	import { writable, type Writable } from 'svelte/store';
 
-	import { DataTable, RadioGroup, RadioItem, ProgressBar } from '@brainandbones/skeleton';
+	import DocsShell from '$docs/DocsShell/DocsShell.svelte';
+	import { DocsFeature, type DocsShellSettings } from '$docs/DocsShell/types';
+
+	import ProgressBar from '$lib/components/ProgressBar/ProgressBar.svelte';
+	import RadioGroup from '$lib/components/Radio/RadioGroup.svelte';
+	import RadioItem from '$lib/components/Radio/RadioItem.svelte';
 	import CodeBlock from '$lib/utilities/CodeBlock/CodeBlock.svelte';
 
+	// @ts-ignore
+	import sveldProgressBar from '$lib/components/ProgressBar/ProgressBar.svelte?raw&sveld';
+
+	// Stores
 	const storeDeterminate: Writable<boolean> = writable(true);
 	const storeHeight: Writable<string> = writable('h-2');
-	const defaultTrackBg: string = 'bg-surface-300 dark:bg-surface-700';
+	const defaultTrackBg: string = 'bg-surface-200-700-token';
+
+	// Docs Shell
+	const settings: DocsShellSettings = {
+		feature: DocsFeature.Component,
+		name: 'Progress Bars',
+		description: 'An indicator showing the progress or completion of a task.',
+		imports: ['ProgressBar'],
+		source: 'components/ProgressBar',
+		components: [{ sveld: sveldProgressBar }]
+	};
+	// const properties: DocsShellTable[] = [
+	// 	{
+	// 		headings: ['Prop', 'Type', 'Default', 'Description'],
+	// 		source: [
+	// 			['<code>label</code>', 'string', '-', 'Set the label text.'],
+	// 			['<code>value</code>', 'number', '-', 'Specifies the amount completed. Indeterminate when <code>undefined</code>.'],
+	// 			['<code>max</code>', 'number', '100', 'Maximum amount the bar represents.'],
+	// 			['<code>height</code>', 'string', 'h-2', 'Provide classes to set track height.'],
+	// 			['<code>rounded</code>', 'string', 'rounded-token', 'Provide classes to set rounded styles.'],
+	// 			['<code>meter</code>', 'string', 'bg-accent-500', 'Provide arbitrary classes to style the meter element.'],
+	// 			['<code>track</code>', 'string', 'bg-surface-200-700-token', 'Provide arbitrary classes to style the track element.']
+	// 		]
+	// 	}
+	// ];
 
 	// Reactive Props
 	$: props = {
@@ -15,40 +48,19 @@
 		value: 50,
 		max: 100,
 		height: $storeHeight,
-		rounded: 'rounded-full',
+		rounded: 'rounded-token',
 		meter: 'bg-accent-500',
 		track: defaultTrackBg
 	};
-
-	// Tables
-	const tableProps: any = {
-		headings: ['Prop', 'Type', 'Default', 'Description'],
-		source: [
-			['label', 'string', '-', 'Set the label text.'],
-			['value', 'number', '-', 'Specifies the amount completed. Indeterminate when <code>undefined</code>.'],
-			['max', 'number', '100', 'Maximum amount the bar represents.'],
-			['height', 'string', 'h-2', 'Provide classes to set track height.'],
-			['rounded', 'string', 'rounded-full', 'Provide classes to set rounded styles.'],
-			['meter', 'string', 'bg-accent-500', 'Provide arbitrary classes to style the meter element.'],
-			['track', 'string', 'bg-surface-300 dark:bg-surface-700', 'Provide arbitrary classes to style the track element.']
-		]
-	};
 </script>
 
-<div class="space-y-8">
-	<!-- Header -->
-	<header class="space-y-4">
-		<h1>Progress Bar</h1>
-		<p>An indicator showing the progress or completion of a task.</p>
-		<CodeBlock language="js" code={`import { ProgressBar } from '@brainandbones/skeleton';`} />
-	</header>
-
-	<!-- Sandbox -->
-	<section class="space-y-4">
-		<div class="space-y-4 xl:space-y-0 xl:grid grid-cols-[2fr,1fr] gap-2">
+<DocsShell {settings}>
+	<!-- Slot: Sandbox -->
+	<svelte:fragment slot="sandbox">
+		<section class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-2">
 			<!-- Example -->
 			<div class="card card-body h-full flex justify-center items-center">
-				<div class="w-[75%]">
+				<div class="py-10 w-[90%]">
 					<svelte:component
 						this={ProgressBar}
 						label={props.label}
@@ -62,7 +74,7 @@
 				</div>
 			</div>
 			<!-- Options -->
-			<div class="card card-body space-y-4">
+			<div class="card card-body space-y-4 w-auto lg:w-[400px]">
 				<!-- Mode -->
 				<label for="">
 					<RadioGroup selected={storeDeterminate} display="flex">
@@ -93,7 +105,7 @@
 				<label>
 					<span>Rounded</span>
 					<select name="rounded" id="rounded" bind:value={props.rounded}>
-						<option value="rounded-none">rounded-none</option>
+						<option value="rounded-token">rounded-token</option>
 						<option value="rounded">rounded</option>
 						<option value="rounded-full">rounded-full</option>
 					</select>
@@ -104,7 +116,9 @@
 					<select name="meter" id="meter" bind:value={props.meter}>
 						<option value="bg-primary-500">bg-primary-500</option>
 						<option value="bg-accent-500">bg-accent-500</option>
+						<option value="bg-ternary-500">bg-ternary-500</option>
 						<option value="bg-warning-500">bg-warning-500</option>
+						<option value="bg-surface-500">bg-surface-500</option>
 					</select>
 				</label>
 				<!-- track -->
@@ -114,34 +128,27 @@
 						<option value={defaultTrackBg}>Default</option>
 						<option value="bg-primary-500/30">bg-primary-500/30</option>
 						<option value="bg-accent-500/30">bg-accent-500/30</option>
+						<option value="bg-ternary-500/30">bg-ternary-500/30</option>
 						<option value="bg-warning-500/30">bg-warning-500/30</option>
+						<option value="bg-surface-500/30">bg-surface-500/30</option>
 					</select>
 				</label>
 			</div>
+		</section>
+	</svelte:fragment>
+
+	<!-- Slot: Usage -->
+	<svelte:fragment slot="usage">
+		<div class="space-y-4">
+			<p>
+				This component is treated as a <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/progressbar_role" target="_blank">ARIA progressbar</a>.
+			</p>
+			<CodeBlock language="html" code={`<ProgressBar label="Progress Bar" value={50} max={100} />`} />
 		</div>
-	</section>
-
-	<!-- Usage -->
-	<section class="space-y-4">
-		<h2>Usage</h2>
-		<CodeBlock language="html" code={`<ProgressBar label="Progress Bar" value={50} max={100} />`} />
-		<h4>Indeterminate</h4>
-		<p>The <code>value</code> property must be removed or set to <code>undefined</code>.</p>
-		<CodeBlock language="html" code={`<ProgressBar />`} />
-	</section>
-
-	<!-- Properties -->
-	<section class="space-y-4">
-		<h2>Properties</h2>
-		<DataTable headings={tableProps.headings} source={tableProps.source} />
-	</section>
-
-	<!-- Accessibility -->
-	<section class="space-y-4">
-		<h2>Accessibility</h2>
-		<p>
-			This component is treated as a <em>Meter</em>. View the
-			<a href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/" target="_blank">ARIA Guidelines</a>.
-		</p>
-	</section>
-</div>
+		<div class="space-y-4">
+			<h2>Indeterminate</h2>
+			<p>The <code>value</code> property must be removed or set to <code>undefined</code>.</p>
+			<CodeBlock language="html" code={`<ProgressBar />`} />
+		</div>
+	</svelte:fragment>
+</DocsShell>

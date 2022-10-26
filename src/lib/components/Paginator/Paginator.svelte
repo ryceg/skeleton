@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import Button from '$lib/components/Button/Button.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -14,20 +13,22 @@
 	export let text: string = 'text-xs md:text-base';
 	export let select: string | undefined = undefined;
 	// Props (buttons)
-	export let buttons: string = 'btn-ghost';
+	export let buttons: string = 'btn-filled';
 
 	// Base Classes
 	const cBase: string = 'flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4';
 	const cLabel: string = 'w-full md:w-auto';
-	const cPageText: string = 'opacity-60 whitespace-nowrap';
+	const cPageText: string = 'whitespace-nowrap';
 
 	// Functionality
-	function onChangeLength(e: any): void {
+	function onChangeLength(): void {
 		offset = 0;
+		/** @event {{ length: number }} amount - Fires when the amount selection input changes.  */
 		dispatch('amount', length);
 	}
 	function onPrev(): void {
 		offset--;
+		/** @event {{ offset: number }} page Fires when the next/back buttons are pressed. */
 		dispatch('page', offset);
 	}
 	function onNext(): void {
@@ -36,7 +37,7 @@
 	}
 
 	// Reactive Classes
-	$: classesBase = `${cBase} ${justify} ${$$props.class || ''}`;
+	$: classesBase = `${cBase} ${justify} ${$$props.class ?? ''}`;
 	$: classesLabel = `${cLabel}`;
 	$: classesSelect = `${select}`;
 	$: classesPageText = `${cPageText} ${text}`;
@@ -49,13 +50,13 @@
 			{#each amounts as amount}<option value={amount}>Show {amount}</option>{/each}
 		</select>
 	</label>
-	<!-- Page Text -->
-	<p class="paginator-text {classesPageText}">
+	<!-- Details -->
+	<p class="paginator-details {classesPageText}">
 		{offset * limit + 1} to {offset * limit + limit} of <strong>{size}</strong>
 	</p>
 	<!-- Arrows -->
-	<div class="paginator-nav space-x-2">
-		<button class="btn {buttons}" on:click={onPrev} disabled={offset === 0}>&larr;</button>
-		<button class="btn {buttons}" on:click={onNext} disabled={(offset + 1) * limit >= size}>&rarr;</button>
+	<div class="paginator-arrows space-x-2">
+		<button class="btn-icon {buttons}" on:click={onPrev} disabled={offset === 0}>&larr;</button>
+		<button class="btn-icon {buttons}" on:click={onNext} disabled={(offset + 1) * limit >= size}>&rarr;</button>
 	</div>
 </div>

@@ -36,6 +36,7 @@ module.exports = plugin(() => {}, {
 			colors: {
 				primary: createColorSet('primary'),
 				accent: createColorSet('accent'),
+				ternary: createColorSet('ternary'),
 				warning: createColorSet('warning'),
 				surface: createColorSet('surface')
 			}

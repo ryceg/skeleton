@@ -4,11 +4,12 @@
 	import CodeBlock from '$lib/utilities/CodeBlock/CodeBlock.svelte';
 </script>
 
-<div class="space-y-10">
+<div class="page-container">
 	<!-- Install -->
 	<section class="space-y-4">
 		<h1>Installation</h1>
-		<p>Let's generate a basic project and install the Skeleton package. Make sure to follow each section in "Getting Started" very carefully.</p>
+		<p>Let's generate a basic project and install the Skeleton package.</p>
+		<p>Note that we currently only support NPM. Yarn and PNPM may work, but official support is not provided for these package managers.</p>
 		<!-- Tabs -->
 		<TabGroup selected={storeFramework}>
 			<Tab value="sveltekit">SvelteKit</Tab>
@@ -18,7 +19,7 @@
 		<!-- Framework: SvelteKit -->
 		{#if $storeFramework === 'sveltekit'}
 			<p>
-				View the <a href="https://kit.svelte.dev/docs/introduction#getting-started" target="_blank">official documentation</a> for the latest instructions.
+				View the <a href="https://kit.svelte.dev/docs/introduction#getting-started" target="_blank" rel="noreferrer">official documentation</a> for the latest instructions.
 			</p>
 			<CodeBlock
 				language="console"
@@ -34,13 +35,13 @@ npm run dev
 			<!-- Framework: Vite (Svelte) -->
 		{:else if $storeFramework === 'vite'}
 			<p>
-				View the <a href="https://vitejs.dev/guide/#scaffolding-your-first-vite-project" target="_blank">official documentation</a> for the latest instructions.
+				View the <a href="https://vitejs.dev/guide/#scaffolding-your-first-vite-project" target="_blank" rel="noreferrer">official documentation</a> for the latest instructions.
 			</p>
 			<CodeBlock
 				language="console"
 				code={`
-npm create vite@latest my-app -- --template svelte-ts
-cd my-app
+npm create vite@latest vite-skeleton-app -- --template svelte-ts
+cd vite-skeleton-app
 npm install
 npm run dev
             `}
@@ -48,7 +49,7 @@ npm run dev
 			<!-- Framework: Astro -->
 		{:else if $storeFramework === 'astro'}
 			<p>
-				View the <a href="https://docs.astro.build/en/install/auto/" target="_blank">official documentation</a> for the latest instructions.
+				View the <a href="https://docs.astro.build/en/install/auto/" target="_blank" rel="noreferrer">official documentation</a> for the latest instructions.
 			</p>
 			<CodeBlock
 				language="console"
@@ -62,9 +63,9 @@ npm run dev
             `}
 			/>
 			<!-- Svelte -->
-			<h3>Install Svelte</h3>
+			<h2>Install Svelte</h2>
 			<p>
-				Add Svelte integration via <a href="https://docs.astro.build/en/guides/integrations-guide/svelte/" target="_blank">@astrojs/svelte</a>
+				Add Svelte integration via <a href="https://docs.astro.build/en/guides/integrations-guide/svelte/" target="_blank" rel="noreferrer">@astrojs/svelte</a>
 			</p>
 			<CodeBlock language="console" code={`npx astro add svelte`} />
 		{/if}
@@ -72,9 +73,9 @@ npm run dev
 
 	<!-- Install Skeleton -->
 	<section class="space-y-4">
-		<h3>Install Skeleton</h3>
+		<h2>Install Skeleton</h2>
 		<p>
-			Install the core Skeleton package from <a href="https://www.npmjs.com/package/@brainandbones/skeleton" target="_blank">NPM</a>.
+			Install the core Skeleton package from <a href="https://www.npmjs.com/package/@brainandbones/skeleton" target="_blank" rel="noreferrer">NPM</a>.
 		</p>
 		<CodeBlock language="console" code={`npm i @brainandbones/skeleton --save-dev`} />
 	</section>

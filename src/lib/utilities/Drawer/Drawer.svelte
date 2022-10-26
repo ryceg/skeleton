@@ -8,10 +8,10 @@
 	export let position: string = 'left';
 	export let duration: number = 150;
 	// Props (backdrop)
-	export let bgBackdrop: string = 'bg-surface-400/70 dark:bg-surface-900/70';
-	export let blur: string = 'backdrop-blur-sm';
+	export let bgBackdrop: string = 'bg-backdrop-token';
+	export let blur: string = 'backdrop-blur-xs';
 	// Props (drawer)
-	export let bgDrawer: string = 'bg-surface-100 dark:bg-surface-800';
+	export let bgDrawer: string = 'bg-surface-100-800-token';
 	export let border: string | undefined = undefined;
 	export let rounded: string | undefined = undefined;
 	export let width: string | undefined = undefined;
@@ -78,7 +78,7 @@
 	// Reactive
 	$: classesWidth = width ? width : animParams.width;
 	$: classesHeight = height ? height : animParams.height;
-	$: classesBackdrop = `${cBaseBackdrop} ${animParams.backdrop} ${bgBackdrop} ${blur} ${$$props.class || ''}`;
+	$: classesBackdrop = `${cBaseBackdrop} ${animParams.backdrop} ${bgBackdrop} ${blur} ${$$props.class ?? ''}`;
 	$: classesDrawer = `${cBaseDrawer} ${classesWidth} ${classesHeight} ${bgDrawer} ${border} ${margin} ${rounded}`;
 </script>
 

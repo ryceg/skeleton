@@ -1,6 +1,6 @@
 <script lang="ts">
 	// Props (base)
-	export let background: string = 'bg-surface-100 dark:bg-surface-800';
+	export let background: string = 'bg-surface-100-800-token';
 	export let border: string = '';
 	export let padding: string = 'p-4 md:py-6';
 	export let shadow: string = 'shadow-lg';
@@ -20,7 +20,7 @@
 	const cTrail: string = 'flex-none flex items-center space-x-4';
 
 	// Reactive Classes
-	$: classesBase = `${cBase} ${background} ${border} ${padding} ${shadow} ${space} ${$$props.class || ''}`;
+	$: classesBase = `${cBase} ${background} ${border} ${padding} ${shadow} ${space} ${$$props.class ?? ''}`;
 	$: classesLead = `${cLead} ${slotLead}`;
 	$: classesCenter = `${cCenter} ${slotDefault}`;
 	$: classesTrail = `${cTrail} ${slotTrail}`;
@@ -29,14 +29,14 @@
 <div class="app-bar {classesBase}" data-testid="app-bar" role="toolbar" aria-label={label} aria-labelledby={labelledby}>
 	<!-- Slot: lead -->
 	{#if $$slots.lead}
-		<div class="appbar-lead {classesLead}"><slot name="lead" /></div>
+		<div class="app-bar-lead {classesLead}"><slot name="lead" /></div>
 	{/if}
 
 	<!-- Slot: center -->
-	<div class="appbar-center {classesCenter}"><slot /></div>
+	<div class="app-bar-center {classesCenter}"><slot /></div>
 
 	<!-- Slot: trail -->
 	{#if $$slots.trail}
-		<div class="appbar-trail {classesTrail}"><slot name="trail" /></div>
+		<div class="app-bar-trail {classesTrail}"><slot name="trail" /></div>
 	{/if}
 </div>

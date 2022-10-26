@@ -1,10 +1,30 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	// Slots:
+	// NOTE: we cannot describe the default slot.
 
-	// Props
+	import { onMount, setContext } from 'svelte';
+
+	/** Enable auto-collapse mode. */
 	export let collapse: boolean = true;
+	/** Provide classes to set the hover background color. */
+	export let hover: string = 'bg-hover-token';
+	/** Provide classes to set vertical spacing. */
 	export let spacing: string = 'space-y-4';
+	/** Provide classes to set padding for summary and content regions. */
+	export let padding: string = 'px-4 py-2';
+	/** Provide classes to set summary border radius. */
+	export let rounded: string = 'rounded-token';
 
+	// Context
+	setContext('hover', hover);
+	setContext('spacing', spacing);
+	setContext('padding', padding);
+	setContext('rounded', rounded);
+
+	// Classes
+	const cBase: string = 'rounded-container-token';
+
+	// Local
 	let elemAccordian: HTMLElement;
 
 	// Lifecycle
@@ -23,8 +43,13 @@
 			});
 		}
 	});
+
+	// Reactive
+	$: classesBase = `${cBase} ${spacing} ${$$props.class ?? ''}`;
 </script>
 
-<div bind:this={elemAccordian} class="accordian-group {spacing} {$$props.classes}" data-testid="accordion-group">
+<!-- @component The Accordion parent element. -->
+
+<div bind:this={elemAccordian} class="accordian-group {classesBase}" data-testid="accordion-group">
 	<slot />
 </div>

@@ -13,6 +13,7 @@
 	export let accent: string = getContext('accent');
 	export let padding: string = getContext('padding');
 	export let rounded: string = getContext('rounded');
+	export let hover: string = getContext('hover');
 
 	// Base Classes
 	const cBase: string = 'flex items-center space-x-4 whitespace-nowrap cursor-pointer';
@@ -48,7 +49,7 @@
 	}
 
 	// A11y Key Down Handler
-	function onKeyDown(event: any): void {
+	function onKeyDown(event: KeyboardEvent): void {
 		dispatch('keydown', event);
 		if (['Enter', 'Space'].includes(event.code)) {
 			event.preventDefault();
@@ -64,8 +65,8 @@
 		return false;
 	};
 	$: isSelected = selectionMatch() ? true : false;
-	$: classesHighlight = isSelected ? accent : '';
-	$: classesBase = `${cBase} ${padding} ${rounded} ${classesHighlight} ${$$props.class || ''}`;
+	$: classesHighlight = isSelected ? `${accent}` : `${hover}`;
+	$: classesBase = `${cBase} ${padding} ${rounded} ${classesHighlight} ${$$props.class ?? ''}`;
 </script>
 
 <!-- prettier-ignore -->
@@ -81,9 +82,9 @@
 	data-testid="listbox-item"
 >
 	<!-- Slot: Lead -->
-	{#if $$slots.lead}<span><slot name="lead" /></span>{/if}
+	{#if $$slots.lead}<span class="listbox-item-lead"><slot name="lead" /></span>{/if}
 	<!-- Slot: Default -->
-	<div class="flex-1 "><slot /></div>
+	<div class="listbox-item-content flex-1"><slot /></div>
 	<!-- Slot: Trail -->
-	{#if $$slots.trail}<span><slot name="trail" /></span>{/if}
+	{#if $$slots.trail}<span class="listbox-item-trail"><slot name="trail" /></span>{/if}
 </li>
