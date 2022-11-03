@@ -42,5 +42,20 @@
 			"$docs/*": ["src/docs/*"]
 		},
 		"outDir": "package"
+	},
+	"typedocOptions": {
+		"extends": ["typedoc/tsdoc.json"],
+		"tagDefinitions": [
+			{
+				"tagName": "@event",
+				"syntaxKind": "line"
+			},
+			{
+				"tagName": "@slot",
+				"syntaxKind": "line"
+			}
+		],
+		"$schema": "https://typedoc.org/schema.json",
+		"entryPoints": ["./src/lib/index.ts"],
 	}
 }
