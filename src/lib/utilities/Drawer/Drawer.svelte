@@ -72,8 +72,8 @@
 	};
 
 	// Classes
-	const cBackdrop = 'fixed top-0 left-0 right-0 bottom-0 z-40 flex';
-	const cDrawer = 'ox-border overflow-y-auto transition-transform';
+	const cBackdrop: CssClasses = 'fixed top-0 left-0 right-0 bottom-0 z-40 flex';
+	const cDrawer: CssClasses = 'box-border overflow-y-auto transition-transform';
 
 	// Local
 	let elemBackdrop: HTMLElement;
