@@ -20,6 +20,9 @@
 	// Types
 	import type { CssClasses } from '$lib';
 
+	/** What type of heading element should be used? */
+	export let headingElement: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' = 'div';
+
 	// Props (state)
 	/** Set open by default on load. */
 	export let open = false;
@@ -100,38 +103,40 @@
 
 <div class="accordion-item {classesBase}" data-testid="accordion-item">
 	<!-- Control -->
-	<button
-		type="button"
-		class="accordion-control {classesControl}"
-		id="accordion-control-{id}"
-		on:click={setActive}
-		on:click
-		on:keydown
-		on:keyup
-		on:keypress
-		aria-expanded={openState}
-		aria-controls="accordion-panel-{id}"
-	>
-		<!-- Lead -->
-		{#if $$slots.lead}
-			<div class="accordion-lead">
-				<slot name="lead" />
+	<svelte:element this={headingElement} role={headingElement === 'div' ? 'heading' : 'heading'}>
+		<button
+			type="button"
+			class="accordion-control {classesControl}"
+			id="accordion-control-{id}"
+			on:click={setActive}
+			on:click
+			on:keydown
+			on:keyup
+			on:keypress
+			aria-expanded={openState}
+			aria-controls="accordion-panel-{id}"
+		>
+			<!-- Lead -->
+			{#if $$slots.lead}
+				<div class="accordion-lead">
+					<slot name="lead" />
+				</div>
+			{/if}
+			<!-- Summary -->
+			<div class="accordion-summary flex-1">
+				<slot name="summary">(summary)</slot>
 			</div>
-		{/if}
-		<!-- Summary -->
-		<div class="accordion-summary flex-1">
-			<slot name="summary">(summary)</slot>
-		</div>
-		<!-- Caret -->
-		<div class="accordion-summary-caret {classesControlCaret}">
-			<!-- SVG Caret -->
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-				<path
-					d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-				/>
-			</svg>
-		</div>
-	</button>
+			<!-- Caret -->
+			<div class="accordion-summary-caret {classesControlCaret}">
+				<!-- SVG Caret -->
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+					<path
+						d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+					/>
+				</svg>
+			</div>
+		</button>
+	</svelte:element>
 	<!-- Panel -->
 	{#if openState}
 		<div
