@@ -31,10 +31,10 @@
 	export let id: string = String(Math.random());
 
 	// Classes
-	const cBase = '';
-	const cControl = 'text-left w-full flex items-center space-x-4';
-	const cControlCaret = 'fill-current w-3 transition-transform duration-[200ms]';
-	const cPanel = '';
+	const cBase: CssClasses = '';
+	const cControl: CssClasses = 'text-left w-full flex items-center space-x-4';
+	const cControlCaret: CssClasses = 'fill-current w-3 transition-transform duration-[200ms]';
+	const cPanel: CssClasses = '';
 
 	// Context API
 	/** Set the auto-collapse mode. */
