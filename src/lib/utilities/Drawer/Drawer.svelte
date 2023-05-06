@@ -59,7 +59,12 @@
 
 	// Presets
 	// prettier-ignore
-	const presets = {
+	const presets: Record<typeof position, {
+		alignment: CssClasses,
+		width: CssClasses,
+		height: CssClasses,
+		rounded: CssClasses
+	}> = {
 		top: { alignment: 'items-start', width: 'w-full', height: 'h-[50%]', rounded: 'rounded-bl-container-token rounded-br-container-token' },
 		bottom: { alignment: 'items-end', width: 'w-full', height: ' h-[50%]', rounded: 'rounded-tl-container-token rounded-tr-container-token' },
 		left: { alignment: 'justify-start', width: 'w-[90%]', height: 'h-full', rounded: 'rounded-tr-container-token rounded-br-container-token' },
