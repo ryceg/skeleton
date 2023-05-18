@@ -8,8 +8,10 @@
 	}
 
 	.button-base-styles {
-		/* Size (match base)  */
-		@apply text-base px-5 py-[9px];
+		/* Size (match base) */
+		@apply text-base;
+		/* Padding */
+		@apply px-5 py-[9px];
 		/* Core */
 		@apply text-center whitespace-nowrap;
 		/* Flex Columns */
@@ -43,12 +45,16 @@
 	/* A circular button meant for housing icons. */
 
 	.btn-icon {
-		/* Extend Base Button Clases */
-		@apply btn;
+		/* Extend Base Button Classes */
+		@apply button-base-styles;
+		/* Padding */
+		@apply p-0;
 		/* Size (match base) */
 		@apply text-base aspect-square w-[43px];
 		/* Rounded */
 		@apply rounded-full;
+		/* Active */
+		@apply active:scale-[95%] active:brightness-90;
 	}
 
 	/* Icon Button: Size */
@@ -74,9 +80,13 @@
 
 	.btn-group {
 		@apply inline-flex flex-row space-x-0 overflow-hidden rounded-token;
+		/* Safari: hover overflow fix for border radius */
+		isolation: isolate;
 	}
 	.btn-group-vertical {
 		@apply btn-group flex-col space-y-0 rounded-container-token;
+		/* Safari: hover overflow fix for border radius */
+		isolation: isolate;
 	}
 
 	/* Button / Anchors */

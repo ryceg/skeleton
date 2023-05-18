@@ -1,56 +1,69 @@
 import { get, writable, type Writable } from 'svelte/store';
+import type { Middleware, PopupSettings } from './types';
 
-// Types
-import type { PopupSettings } from './types';
-
-// Store
+// Use a store to pass the Floating UI import references
 export const storePopup: Writable<any> = writable(undefined);
 
-// Action
-export function popup(node: HTMLElement, args: PopupSettings) {
-	// prettier-ignore
-	const {
-		event = 'click',
-		target,
-		placement,
-		closeQuery = 'a[href], button',
-		middleware,
-		state 
-	}: PopupSettings = args;
-	if (!event || !target) return;
+export function popup(triggerNode: HTMLElement, args: PopupSettings) {
+	// Floating UI Modules
+	const { computePosition, autoUpdate, offset, shift, flip, arrow, size, autoPlacement, hide, inline } = get(storePopup);
+	// Local State
+	const popupState = {
+		open: false,
+		autoUpdateCleanup: () => {}
+	};
+	const focusableAllowedList = ':is(a[href], button, input, textarea, select, details, [tabindex]):not([tabindex="-1"])';
+	let focusablePopupElements: HTMLElement[];
+	const documentationLink = 'https://www.skeleton.dev/utilities/popups';
+	// Elements
+	let elemPopup: HTMLElement;
+	let elemArrow: HTMLElement;
 
-	// Local
-	const { computePosition, autoUpdate, flip, shift, offset, arrow } = get(storePopup);
-	const elemPopup: HTMLElement | null = document.querySelector(`[data-popup="${target}"]`);
-	const elemArrow: HTMLElement | null = elemPopup?.querySelector(`.arrow`) ?? null;
-	let isVisible: boolean = false;
-	let autoUpdateCleanup: any;
+	function setDomElements(): void {
+		elemPopup = document.querySelector(`[data-popup="${args.target}"]`) ?? document.createElement('div');
+		elemArrow = elemPopup?.querySelector(`.arrow`) ?? document.createElement('div');
+	}
+	setDomElements(); // init
 
-	// Local A11y Variables
-	const elemWhitelist: string = 'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])';
-	let activeFocusIdx: number;
-	let focusableElems: HTMLElement[];
-
-	// On Init (floating ui)
+	// Render Floating UI Popup
 	function render(): void {
-		if (!elemPopup || !computePosition) return;
+		// Error handling for required Floating UI modules
+		if (!elemPopup) throw new Error(`The data-popup="${args.target}" element was not found. ${documentationLink}`);
+		if (!computePosition) throw new Error(`Floating UI 'computePosition' not found for data-popup="${args.target}". ${documentationLink}`);
+		if (!offset) throw new Error(`Floating UI 'offset' not found for data-popup="${args.target}". ${documentationLink}`);
+		if (!shift) throw new Error(`Floating UI 'shift' not found for data-popup="${args.target}". ${documentationLink}`);
+		if (!flip) throw new Error(`Floating UI 'flip' not found for data-popup="${args.target}". ${documentationLink}`);
+		if (!arrow) throw new Error(`Floating UI 'arrow' not found for data-popup="${args.target}". ${documentationLink}`);
 
-		// Construct Middlware
-		// Note the order: https://floating-ui.com/docs/middleware#ordering
-		const genMiddlware = [];
-		// https://floating-ui.com/docs/offset
-		if (offset) genMiddlware.push(offset(middleware?.offset ?? 8));
-		// https://floating-ui.com/docs/shift
-		if (shift) genMiddlware.push(shift(middleware?.shift ?? { padding: 8 }));
-		// https://floating-ui.com/docs/flip
-		if (flip) genMiddlware.push(flip(middleware?.flip));
-		// https://floating-ui.com/docs/arrow
-		if (arrow && elemArrow) genMiddlware.push(arrow(middleware?.arrow ?? { element: elemArrow }));
+		// Bundle optional middleware
+		const optionalMiddleware = [];
+		// https://floating-ui.com/docs/size
+		if (size) optionalMiddleware.push(size(args.middleware?.size));
+		// https://floating-ui.com/docs/autoPlacement
+		if (autoPlacement) optionalMiddleware.push(autoPlacement(args.middleware?.autoPlacement));
+		// https://floating-ui.com/docs/hide
+		if (hide) optionalMiddleware.push(hide(args.middleware?.hide));
+		// https://floating-ui.com/docs/inline
+		if (inline) optionalMiddleware.push(inline(args.middleware?.inline));
 
+		// Floating UI Compute Position
 		// https://floating-ui.com/docs/computePosition
-		computePosition(node, elemPopup, {
-			placement: placement ?? 'bottom',
-			middleware: genMiddlware
+		computePosition(triggerNode, elemPopup, {
+			placement: args.placement ?? 'bottom',
+			// Middleware - NOTE: the order matters:
+			// https://floating-ui.com/docs/middleware#ordering
+			middleware: [
+				// https://floating-ui.com/docs/offset
+				offset(args.middleware?.offset ?? 8),
+				// https://floating-ui.com/docs/shift
+				shift(args.middleware?.shift ?? { padding: 8 }),
+				// https://floating-ui.com/docs/flip
+				flip(args.middleware?.flip),
+				// https://floating-ui.com/docs/arrow
+				arrow(args.middleware?.arrow ?? { element: elemArrow || null }),
+				// Implement optional middleware
+				...optionalMiddleware
+			]
 		}).then(({ x, y, placement, middlewareData }: any) => {
 			Object.assign(elemPopup.style, {
 				left: `${x}px`,
@@ -75,153 +88,134 @@ export function popup(node: HTMLElement, args: PopupSettings) {
 					[staticSide]: '-4px'
 				});
 			}
-			// Set Focusable State
-			setFocusableState();
 		});
 	}
 
-	// Set Focusable State
-	function setFocusableState(): void {
+	// State Handlers
+	function open(): void {
 		if (!elemPopup) return;
-		// Create array of all focusable elements, so that we can iterate through them
-		focusableElems = Array.from(elemPopup?.querySelectorAll(elemWhitelist));
-		// reset the focus index
-		activeFocusIdx = -1;
-		// Automatically focus the element if openWithFocus is true (for example if
-		// the menu was opened with Enter instead of with a click
-		activeFocusIdx = 0;
-		focusableElems[0]?.focus();
-	}
-
-	// Window Click Handler
-	const onWindowClick = (event: any) => {
-		if (!node || !elemPopup) return;
-		// If click is within the trigger node
-		const clickTriggerNode = node.contains(event.target);
-		if (clickTriggerNode) {
-			isVisible == false ? show() : close();
-		} else {
-			// If click is outside the popup
-			const clickedOutsidePopup = elemPopup && !elemPopup.contains(event.target);
-			if (clickedOutsidePopup) {
-				close();
-			} else {
-				// If click is interactive child element within popup (ex: anchor or button)
-				const interactiveMenuElems = elemPopup?.querySelectorAll(closeQuery);
-				if (!interactiveMenuElems.length) return;
-				interactiveMenuElems.forEach((elem) => {
-					if (elem.contains(event.target)) close();
-				});
-			}
-		}
-	};
-
-	// Hover Handlers
-	const onMouseOver = () => {
-		show();
-		isVisible = true;
-		stateEventHandler(true);
-	};
-	const onMouseOut = () => {
-		close();
-		isVisible = false;
-		stateEventHandler(false);
-	};
-
-	// Visbility
-	function show(): void {
-		if (!elemPopup) return;
-		render(); // update
+		// Set open state to on
+		popupState.open = true;
+		// Return the current state
+		if (args.state) args.state({ state: popupState.open });
+		// Update render settings
+		render();
+		// Update the DOM
 		elemPopup.style.display = 'block';
 		elemPopup.style.opacity = '1';
-		elemPopup.style.pointerEvents = 'initial';
-		isVisible = true;
-		stateEventHandler(true);
-		// Utilize autoUpdate ONLY when the popup is.
+		elemPopup.style.pointerEvents = 'auto';
+		// Trigger Floating UI autoUpdate (open only)
 		// https://floating-ui.com/docs/autoUpdate
-		autoUpdateCleanup = autoUpdate(node, elemPopup, render);
+		popupState.autoUpdateCleanup = autoUpdate(triggerNode, elemPopup, render);
+		// Focus the first focusable element within the popup
+		focusablePopupElements = Array.from(elemPopup?.querySelectorAll(focusableAllowedList));
 	}
-	function close(): void {
+	function close(callback?: () => void): void {
 		if (!elemPopup) return;
-		elemPopup.style.opacity = '0';
+		// Set transition duration
 		const cssTransitionDuration = parseFloat(window.getComputedStyle(elemPopup).transitionDuration.replace('s', '')) * 1000;
 		setTimeout(() => {
-			elemPopup.style.display = 'hidden';
+			// Set open state to off
+			popupState.open = false;
+			// Return the current state
+			if (args.state) args.state({ state: popupState.open });
+			// Update the DOM
+			elemPopup.style.opacity = '0';
 			elemPopup.style.pointerEvents = 'none';
-			isVisible = false;
-			stateEventHandler(false);
+			// Cleanup Floating UI autoUpdate (close only)
+			if (popupState.autoUpdateCleanup) popupState.autoUpdateCleanup();
+			// Trigger callback
+			if (callback) callback();
 		}, cssTransitionDuration);
-		// Cleanup autoUpdate on close (REQUIRED)
-		if (autoUpdateCleanup) autoUpdateCleanup();
 	}
 
-	// State Handler
-	const stateEventHandler = (value: boolean): void => {
-		if (state) state({ state: value });
-	};
+	// Event Handlers
+	function toggle(): void {
+		popupState.open === false ? open() : close();
+	}
+	function onWindowClick(event: any): void {
+		// Return if the popup is not yet open
+		if (popupState.open === false) return;
+		// Return if click is the trigger element
+		if (triggerNode.contains(event.target)) return;
+		// If click it outside the popup
+		if (elemPopup && elemPopup.contains(event.target) === false) {
+			close();
+			return;
+		}
+		// Handle Close Query State
+		const closeQueryString: string = args.closeQuery === undefined ? 'a[href], button' : args.closeQuery;
+		const closableMenuElements = elemPopup?.querySelectorAll(closeQueryString);
+		closableMenuElements?.forEach((elem) => {
+			if (elem.contains(event.target)) close();
+		});
+	}
 
-	// A11y Keydown Handler
+	// Keyboard Interactions for A11y
 	const onWindowKeyDown = (event: KeyboardEvent): void => {
-		if (!isVisible) return;
+		if (popupState.open === false) return;
 		// Handle keys
 		const key: string = event.key;
-		// TODO: || (document.activeElement !== node && key === 'Tab')
+		// On Esc key
 		if (key === 'Escape') {
 			event.preventDefault();
+			triggerNode.focus();
 			close();
-			node.focus();
 			return;
-		} else if (key === 'ArrowDown') {
+		}
+		// On Tab or ArrowDown key
+		const triggerMenuFocused: boolean = popupState.open && document.activeElement === triggerNode;
+		if (triggerMenuFocused && (key === 'ArrowDown' || key === 'Tab')) {
 			event.preventDefault();
-			if (activeFocusIdx < focusableElems.length - 1) {
-				// Move down the menu
-				activeFocusIdx += 1;
-				focusableElems[activeFocusIdx]?.focus();
-			}
-		} else if (key === 'ArrowUp') {
-			event.preventDefault();
-			if (activeFocusIdx > 0) {
-				// Move up the menu
-				activeFocusIdx -= 1;
-				focusableElems[activeFocusIdx]?.focus();
-			} else if (focusableElems.length && activeFocusIdx === -1) {
-				// Start at the bottom of the menu if first key is arrow up key
-				event.preventDefault();
-				activeFocusIdx = focusableElems.length - 1;
-				focusableElems[activeFocusIdx]?.focus();
-			}
+			if (focusableAllowedList.length > 0) focusablePopupElements[0].focus();
 		}
 	};
 
-	// On Init
-	render();
-
-	// Event Listners
-	if (event === 'click') {
-		window.addEventListener('click', onWindowClick, true);
+	// Event Listeners
+	switch (args.event) {
+		case 'click':
+			triggerNode.addEventListener('click', toggle, true);
+			window.addEventListener('click', onWindowClick, true);
+			break;
+		case 'hover':
+			triggerNode.addEventListener('mouseover', open, true);
+			triggerNode.addEventListener('mouseleave', () => close(), true);
+			break;
+		case 'focus-blur':
+			triggerNode.addEventListener('focus', toggle, true);
+			triggerNode.addEventListener('blur', () => close(), true);
+			break;
+		case 'focus-click':
+			triggerNode.addEventListener('focus', open, true);
+			window.addEventListener('click', onWindowClick, true);
+			break;
+		default:
+			throw new Error(`Event value of '${args.event}' is not supported. ${documentationLink}`);
 	}
-	if (event === 'hover') {
-		node.addEventListener('mouseover', show, true);
-		node.addEventListener('mouseout', close, true);
-	}
-	if (event === 'hover-click') {
-		node.addEventListener('mouseover', show, true);
-		window.addEventListener('click', onWindowClick, true);
-	}
-	// A11y Event Listeners
 	window.addEventListener('keydown', onWindowKeyDown, true);
+
+	// Render popup on initialization
+	render();
 
 	// Lifecycle
 	return {
-		update(newArgs: any) {
-			args = newArgs;
+		update(newArgs: PopupSettings) {
+			close(() => {
+				args = newArgs;
+				render();
+				setDomElements();
+			});
 		},
 		destroy() {
-			// ---
+			// Trigger Events
+			triggerNode.removeEventListener('click', toggle, true);
+			triggerNode.removeEventListener('mouseover', open, true);
+			triggerNode.removeEventListener('mouseleave', () => close(), true);
+			triggerNode.removeEventListener('focus', toggle, true);
+			triggerNode.removeEventListener('focus', open, true);
+			triggerNode.removeEventListener('blur', () => close(), true);
+			// Window Events
 			window.removeEventListener('click', onWindowClick, true);
-			node.removeEventListener('mouseover', onMouseOver, true);
-			node.removeEventListener('mouseout', onMouseOut, true);
-			// ---
 			window.removeEventListener('keydown', onWindowKeyDown, true);
 		}
 	};

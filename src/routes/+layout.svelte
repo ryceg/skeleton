@@ -1,15 +1,15 @@
 <!-- Layout: (root) -->
 <script lang="ts">
-	// Depedency: Highlight JS
+	// Dependency: Highlight JS
 	import hljs from 'highlight.js';
-	import '$lib/styles/highlight-js.css'; // was: 'highlight.js/styles/github-dark.css';
+	import '$docs/styles/highlight-js.css';
 	import { storeHighlightJs } from '$lib/utilities/CodeBlock/stores';
 	storeHighlightJs.set(hljs);
 
-	// Depedency: Floating UI
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
+	// Dependency: Floating UI
 	import { storePopup } from '$lib/utilities/Popup/popup';
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	// SvelteKit Imports
 	import { browser } from '$app/environment';
@@ -20,7 +20,7 @@
 	import type { ModalComponent } from '$lib/utilities/Modal/types';
 
 	// Stores
-	import { storeCurrentUrl, storeTheme } from '$docs/stores/stores';
+	import { storeTheme } from '$docs/stores/stores';
 	import { storePreview } from '$docs/layouts/DocsThemer/stores';
 
 	// Components & Utilities
@@ -41,7 +41,9 @@
 	import ModalExampleImage from '$docs/modals/examples/ModalExampleImage.svelte';
 
 	// Skeleton Stylesheets
-	import '$lib/styles/all.css';
+	// import '$lib/styles/all.css';
+	import '$lib/styles/skeleton.css';
+	// import '$lib/styles/skeleton-minimal.css';
 	// The Skeleton blog stylesheet
 	import '$docs/styles/blog.css';
 	// Global Stylesheets
@@ -57,7 +59,7 @@
 	// Init Vercel Analytics
 	if ($storeVercelProductionMode) import('@vercel/analytics').then((mod) => mod.inject());
 
-	// SEO Metatags
+	// SEO Meta tags
 	const metaDefaults = {
 		title: 'Skeleton — UI Toolkit for Svelte + Tailwind',
 		description: 'Skeleton is a fully featured UI Toolkit for building reactive interfaces quickly using Svelte and Tailwind.',
@@ -111,8 +113,6 @@
 
 	// Lifecycle
 	afterNavigate((params: any) => {
-		// Store current page route URL
-		storeCurrentUrl.set($page.url.pathname);
 		// Scroll to top
 		const isNewPage: boolean = params.from && params.to && params.from.route.id !== params.to.route.id;
 		const elemPage = document.querySelector('#page');

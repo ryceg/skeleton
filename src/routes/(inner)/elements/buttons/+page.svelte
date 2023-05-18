@@ -16,10 +16,10 @@
 		stylesheets: ['elements/buttons'],
 		source: 'styles/elements/buttons.css',
 		classes: [
-			['<code>.btn</code>', '-', 'Creates a text button using a button or anchor.'],
-			['<code>.btn-icon</code>', '-', 'Creates a text icon button using a button or anchor.'],
-			['<code>.btn-[value]</code>', 'sm | base | lg | xl', 'Canned button sizes that define padding and text sizes.'],
-			['<code>.btn-icon-[value]</code>', 'sm | base | lg | xl', 'Canned icon button sizes that define padding and text sizes.']
+			['<code class="code">.btn</code>', '-', 'Creates a text button using a button or anchor.'],
+			['<code class="code">.btn-icon</code>', '-', 'Creates a text icon button using a button or anchor.'],
+			['<code class="code">.btn-[value]</code>', 'sm | base | lg | xl', 'Canned button sizes that define padding and text sizes.'],
+			['<code class="code">.btn-icon-[value]</code>', 'sm | base | lg | xl', 'Canned icon button sizes that define padding and text sizes.']
 		]
 	};
 
@@ -69,9 +69,9 @@
 				<CodeBlock
 					language="html"
 					code={`
-<button type="button" class="btn-icon variant-filled">(icon)</button>
-<button type="button" class="btn variant-filled">Button</button>
-<button type="button" class="btn variant-filled">
+<button type="button" class="btn-icon ${currentVariant}">(icon)</button>
+<button type="button" class="btn ${currentVariant}">Button</button>
+<button type="button" class="btn ${currentVariant}">
 	<span>(icon)</span>
 	<span>Button</span>
 </button>
@@ -80,9 +80,9 @@
 				<CodeBlock
 					language="html"
 					code={`
-<a href="/" class="btn-icon variant-filled">(icon)</a>
-<a href="/" class="btn variant-filled">a</a>
-<a href="/" class="btn variant-filled">
+<a href="/" class="btn-icon ${currentVariant}">(icon)</a>
+<a href="/" class="btn ${currentVariant}">a</a>
+<a href="/" class="btn ${currentVariant}">
 	<span>(icon)</span>
 	<span>Anchor</span>
 </a>
@@ -95,19 +95,38 @@
 	<!-- Slot: Usage -->
 	<svelte:fragment slot="usage">
 		<p>
-			Use <code>.btn</code> to add basic button styles to any anchor or button element. Replace with <code>.btn-icon</code> for an icon
-			button. Mix buttons with any arbitrary background color or variant style classes, such as <code>.variant-[style]-[themeColor]</code>.
+			Use <code class="code">.btn</code> to add basic button styles to any anchor or button element. Replace with
+			<code class="code">.btn-icon</code>
+			for an icon button. Mix buttons with any arbitrary background color or variant style classes, such as
+			<code class="code">.variant-[style]-[themeColor]</code>.
 		</p>
 		<section class="space-y-4">
-			<h2>Sizes</h2>
-			<p>A number of canned size presets are available via <code>.btn-[size]</code>.</p>
+			<h2 class="h2">Sizes</h2>
+			<p>A number of canned size presets are available via <code class="code">.btn-[size]</code>.</p>
 			<DocsPreview background="neutral">
 				<svelte:fragment slot="preview">
-					<div class="flex items-center gap-4">
-						<button type="button" class="btn btn-sm variant-filled">sm</button>
-						<button type="button" class="btn variant-filled">base</button>
-						<button type="button" class="btn btn-lg variant-filled">lg</button>
-						<button type="button" class="btn btn-xl variant-filled">xl</button>
+					<div class="space-y-4">
+						<div class="flex justify-center items-center gap-4">
+							<button type="button" class="btn btn-sm variant-filled">sm</button>
+							<button type="button" class="btn variant-filled">base</button>
+							<button type="button" class="btn btn-lg variant-filled">lg</button>
+							<button type="button" class="btn btn-xl variant-filled">xl</button>
+						</div>
+						<hr />
+						<div class="flex justify-center items-center gap-4">
+							<button type="button" class="btn-icon btn-icon-sm variant-filled">
+								<i class="fa-solid fa-skull" />
+							</button>
+							<button type="button" class="btn-icon variant-filled">
+								<i class="fa-solid fa-skull" />
+							</button>
+							<button type="button" class="btn-icon btn-icon-lg variant-filled">
+								<i class="fa-solid fa-skull" />
+							</button>
+							<button type="button" class="btn-icon btn-icon-xl variant-filled">
+								<i class="fa-solid fa-skull" />
+							</button>
+						</div>
 					</div>
 				</svelte:fragment>
 				<svelte:fragment slot="source">
@@ -133,7 +152,7 @@
 			</DocsPreview>
 		</section>
 		<section class="space-y-4">
-			<h2>Button Groups</h2>
+			<h2 class="h2">Button Groups</h2>
 			<p>Groups related anchors or buttons. Pairs with any variant style. Horizontal and vertical options are provided.</p>
 			<DocsPreview background="neutral">
 				<svelte:fragment slot="preview">
@@ -155,7 +174,7 @@
 `}
 					/>
 					<!-- prettier-ignore -->
-					<p>Customize the vertical dividers using <a href="https://tailwindcss.com/blog/tailwindcss-v3-1#arbitrary-values-but-for-variants" target="_blank" rel="noreferrer">Tailwind's arbitrary variant syntax</a>.</p>
+					<p>Customize the vertical dividers using <a class="anchor" href="https://tailwindcss.com/blog/tailwindcss-v3-1#arbitrary-values-but-for-variants" target="_blank" rel="noreferrer">Tailwind's arbitrary variant syntax</a>.</p>
 					<CodeBlock language="html" code={`<div class="btn-group variant-ghost-primary [&>*+*]:border-red-500">...</div>`} />
 				</svelte:fragment>
 			</DocsPreview>
@@ -182,10 +201,10 @@
 			</DocsPreview>
 		</section>
 		<section class="space-y-4">
-			<h2>SvelteKit Link Options</h2>
+			<h2 class="h2">SvelteKit Link Options</h2>
 			<!-- prettier-ignore -->
 			<p>
-				While using native anchor elements, you can take advantage of <a href="https://kit.svelte.dev/docs/link-options" target="_blank" rel="noreferrer">SvelteKit's Link Options</a> such as a <em>prefetch</em>.
+				While using native anchor elements, you can take advantage of <a class="anchor" href="https://kit.svelte.dev/docs/link-options" target="_blank" rel="noreferrer">SvelteKit's Link Options</a> such as a <em>prefetch</em>.
 			</p>
 			<CodeBlock language="html" code={`<a href="/" class="btn variant-filled" data-sveltekit-preload-data="hover">Button</a>`} />
 		</section>

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { modeCurrent, setModeUserPrefers, setModeCurrent, setInitialClassState } from './lightswitch';
+	import { onMount } from 'svelte';
+	import { modeCurrent, setModeUserPrefers, setModeCurrent, setInitialClassState, getModeOsPrefers } from './lightswitch';
 
 	// Types
 	import type { CssClasses } from '$lib';
@@ -43,12 +44,20 @@
 
 	// A11y Input Handlers
 	function onKeyDown(event: OnKeyDownEvent): void {
-		// Enter/Space triggers selecton event
+		// Enter/Space triggers selection event
 		if (['Enter', 'Space'].includes(event.code)) {
 			event.preventDefault();
 			event.currentTarget.click();
 		}
 	}
+
+	// Lifecycle
+	onMount(() => {
+		// Sync lightswitch with the theme
+		if (!('modeCurrent' in localStorage)) {
+			setModeCurrent(getModeOsPrefers());
+		}
+	});
 
 	// State
 	$: trackBg = $modeCurrent === true ? bgLight : bgDark;
@@ -62,7 +71,7 @@
 </script>
 
 <svelte:head>
-	{@html `<script>(${setInitialClassState.toString()})();</script>`}
+	{@html `<script nonce="%sveltekit.nonce%">(${setInitialClassState.toString()})();</script>`}
 </svelte:head>
 
 <div

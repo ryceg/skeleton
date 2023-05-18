@@ -33,8 +33,22 @@
 	};
 
 	// Local
-	const imgPlaceholder = 'https://i.pravatar.cc/?img=48';
-	const borderStyles = 'border-4 border-surface-300-600-token hover:!border-primary-500';
+	const imgPlaceholder = 'https://source.unsplash.com/YOErFW8AfkI/128x128';
+	const borderStyles = 'border-4 	border-surface-300-600-token hover:!border-primary-500';
+
+	const roundedMapping = {
+		0: 'rounded-none',
+		1: 'rounded-sm',
+		2: 'rounded',
+		3: 'rounded-md',
+		4: 'rounded-lg',
+		5: 'rounded-xl',
+		6: 'rounded-2xl',
+		7: 'rounded-3xl',
+		8: 'rounded-full'
+	};
+	let rangeSliderValue: keyof typeof roundedMapping = 8;
+	let fallback = '';
 
 	// Reactive
 	$: actionParams = '#Apollo';
@@ -54,12 +68,16 @@
 <DocsShell {settings}>
 	<!-- Slot: Sandbox -->
 	<svelte:fragment slot="sandbox">
-		<DocsPreview>
+		<DocsPreview regionFooter="grid grid-cols-[100px_1fr] gap-4 items-center">
 			<svelte:fragment slot="preview">
-				<Avatar src={imgPlaceholder} width="w-32" />
+				<Avatar src={imgPlaceholder} width="w-32" rounded={roundedMapping[rangeSliderValue]} />
 			</svelte:fragment>
 			<svelte:fragment slot="source">
-				<CodeBlock language="html" code={`<Avatar src="${imgPlaceholder}" width="w-32" />`} />
+				<CodeBlock language="html" code={`<Avatar src="${imgPlaceholder}" width="w-32" rounded="${roundedMapping[rangeSliderValue]}" />`} />
+			</svelte:fragment>
+			<svelte:fragment slot="footer">
+				<div class="text-center"><code class="code">{roundedMapping[rangeSliderValue]}</code></div>
+				<input type="range" bind:value={rangeSliderValue} max={Object.keys(roundedMapping).length - 1} step={1} />
 			</svelte:fragment>
 		</DocsPreview>
 	</svelte:fragment>
@@ -67,7 +85,7 @@
 	<!-- Slot: Usage -->
 	<svelte:fragment slot="usage">
 		<section class="space-y-4">
-			<h2>Using Initials</h2>
+			<h2 class="h2">Using Initials</h2>
 			<p>Display up to two text characters. (ex: Jane Doe would be JD)</p>
 			<DocsPreview background="neutral">
 				<svelte:fragment slot="preview">
@@ -79,8 +97,8 @@
 			</DocsPreview>
 		</section>
 		<section class="space-y-4">
-			<h2>Interactive Border</h2>
-			<p>Apply the following styles using the <code>border</code> and <code>cursor</code> properties.</p>
+			<h2 class="h2">Interactive Border</h2>
+			<p>Apply the following styles using the <code class="code">border</code> and <code class="code">cursor</code> properties.</p>
 			<DocsPreview background="neutral">
 				<svelte:fragment slot="preview">
 					<Avatar border={borderStyles} cursor="cursor-pointer" />
@@ -99,9 +117,34 @@
 			</DocsPreview>
 		</section>
 		<section class="space-y-4">
-			<h2>Applying Filters</h2>
+			<h2 class="h2">Handling Fallbacks</h2>
 			<p>
-				See <a href="/actions/filters">Filters</a> to learn how to import and configure the filters action and SVG filter components.
+				Use the <code class="code">fallback</code> property to specify a fallback when images fail to load, or supply the user's initials.
+			</p>
+			<DocsPreview background="neutral" regionFooter="text-center">
+				<svelte:fragment slot="preview">
+					{#key fallback}
+						<Avatar src="invalid-image.jpg" {fallback} />
+					{/key}
+				</svelte:fragment>
+				<svelte:fragment slot="source">
+					<p>Provide a fallback image to display when the primary <code class="code">src</code> image fails.</p>
+					<CodeBlock language="html" code={`<Avatar src="invalid-image.jpg" fallback="fallback-image.jpg" />`} />
+					<p>Optionally you can also set initials to show when the primary <code class="code">src</code> image fails.</p>
+					<CodeBlock language="html" code={`<Avatar src="invalid-image.jpg" initials="AB" />`} />
+				</svelte:fragment>
+				<svelte:fragment slot="footer">
+					<select class="select w-auto" name="fallback" id="fallback" bind:value={fallback}>
+						<option value={`${imgPlaceholder}`}>Fallback Image</option>
+						<option value="">Fallback Initials</option>
+					</select>
+				</svelte:fragment>
+			</DocsPreview>
+		</section>
+		<section class="space-y-4">
+			<h2 class="h2">Applying Filters</h2>
+			<p>
+				See <a class="anchor" href="/actions/filters">Filters</a> to learn how to import and configure the filters action and SVG filter components.
 			</p>
 			<CodeBlock language="ts" code={`import { filter, ${actionParams.replace('#', '')} } from '@skeletonlabs/skeleton';`} />
 			<DocsPreview background="neutral" regionFooter="text-center">

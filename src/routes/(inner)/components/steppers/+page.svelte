@@ -76,31 +76,39 @@
 						<Step {locked}>
 							<svelte:fragment slot="header">A Locked Step.</svelte:fragment>
 							<p>
-								This Step component uses the <code>locked</code> property to prevent progress. This is ideal for multi-step forms, such as registration.
-								For now we'll simulate a successful validation condition using the toggle below.
+								This Step component uses the <code class="code">locked</code> property to prevent progress. This is ideal for multi-step forms,
+								such as registration. For now we'll simulate a successful validation condition using the toggle below.
 							</p>
-							<div class="card !bg-transparent p-4 text-center">
-								<SlideToggle name="locked-state" bind:checked={locked}>This step is <u>{locked ? 'Locked' : 'Unlocked'}</u></SlideToggle>
-							</div>
+							<aside class="alert variant-ghost-warning">
+								<div class="alert-message">
+									<p>This step is <u>{locked ? 'Locked' : 'Unlocked'}</u></p>
+								</div>
+								<div class="alert-actions">
+									<SlideToggle name="locked-state" bind:checked={locked} active="bg-warning-500" />
+								</div>
+							</aside>
 						</Step>
 						<Step>
 							<svelte:fragment slot="header">Long Form Content.</svelte:fragment>
 							<p>The steps will expand to fit content of any length.</p>
 							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab
-								accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto
-								corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus
-								facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur
-								adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus unde, tempora ut nobis eum.
-								Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe
-								dicta repellendus facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti.
+								<!-- cspell:disable -->
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus
+								unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel
+								expedita porro vero, saepe dicta repellendus facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem
+								ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus
+								unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel
+								expedita porro vero, saepe dicta repellendus facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem
+								ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus
+								unde, tempora ut nobis eum. Veniam, architecto corrupti.
+								<!-- cspell:enable -->
 							</p>
 						</Step>
 						<Step>
 							<svelte:fragment slot="header">Almost Done.</svelte:fragment>
 							<p>
-								A Complete button will appear on the last step. When the step is unlocked and the button pressed, an <code>on:complete</code
+								A Complete button will appear on the last step. When the step is unlocked and the button pressed, an <code class="code"
+									>on:complete</code
 								> event will be fired. You can use this trigger to submit form data to a server.
 							</p>
 						</Step>
@@ -131,33 +139,58 @@
 	<!-- Slot: Usage -->
 	<svelte:fragment slot="usage">
 		<p>
-			Create a set of Steps within the Stepper, then use the <code>on:complete</code> event to detect when all steps are complete. Since
-			horizontal space may be limited on small screens, we recommend no more than <em>five</em> steps at max.
+			Create a set of Steps within the Stepper, then use the <code class="code">on:complete</code> event to detect when all steps are
+			complete. Since horizontal space may be limited on small screens, we recommend no more than <em>five</em> steps at max.
 		</p>
+		<!-- Event Handlers -->
 		<section class="space-y-4">
-			<h2>Event Handlers</h2>
-			<h3>Complete Event</h3>
+			<h2 class="h2">Event Handlers</h2>
+			<h3 class="h3">Complete Event</h3>
 			<CodeBlock language="ts" code={`function onCompleteHandler(e: Event): void { console.log('event:complete', e); }`} />
 			<CodeBlock language="html" code={`<Stepper on:complete={onCompleteHandler}>...</Stepper>`} />
-			<h3>Next, Step and Previous</h3>
+			<h3 class="h3">Next, Step and Previous</h3>
 			<p>Events are fired when the next or previous steps are pressed, step fires for both cases.</p>
-			<CodeBlock language="ts" code={`function onStepHandler(e: {step: number, state: {current: number, total: number}}): void {
+			<CodeBlock
+				language="ts"
+				code={`function onStepHandler(e: {step: number, state: {current: number, total: number}}): void {
 	console.log('event:step', e); 
-}`} />
+}`}
+			/>
 			<CodeBlock language="html" code={`<Stepper on:next={onNextHandler} on:step={onStepHandler} on:back={onBackHandler}>...</Stepper>`} />
-			<blockquote>
-				TIP: <code>e.state.current</code> contains the step shown to the user after navigation, <code>e.step</code> contains the step where navigation occured.
+			<blockquote class="blockquote">
+				TIP: <code class="code">e.state.current</code> contains the step shown to the user after navigation,
+				<code class="code">e.step</code> contains the step where navigation occurred.
 			</blockquote>
 		</section>
-
+		<!-- Locked State -->
 		<section class="space-y-4">
-			<h2>Locked State</h2>
+			<h2 class="h2">Locked State</h2>
 			<p>
-				Each Step can have a <code>locked</code> property set, when set to <em>TRUE</em> this locks progression for that step. For example, you
-				can lock a step until a form within it becomes valid.
+				Each Step can have a <code class="code">locked</code> property set, when set to <em>TRUE</em> this locks progression for that step. For
+				example, you can lock a step until a form within it becomes valid.
 			</p>
 			<CodeBlock language="ts" code={`let lockedState: boolean = true;`} />
 			<CodeBlock language="html" code={`<Step locked={lockedState}>...</Step>`} />
+		</section>
+		<!-- Step Term -->
+		<section class="space-y-4">
+			<h2 class="h2">Step Term</h2>
+			<p>
+				Use the <code class="code">stepTerm</code> property to override text shown in the animated section at the top of the Stepper, which is
+				useful if you need i18n support for other languages.
+			</p>
+			<CodeBlock
+				language="html"
+				code={`
+<!-- French: Marcher 1, Marcher 2, ... -->
+<Step stepTerm='Marcher'>...</Step>\n
+<!-- Spanish: Paso 1, Paso 2, ... -->
+<Step stepTerm='Paso'>...</Step>
+			`}
+			/>
+			<p>
+				This can be overwritten per each Step as well, which updates the <em>default</em> and <em>header</em> slot placeholder text.
+			</p>
 		</section>
 	</svelte:fragment>
 </DocsShell>
